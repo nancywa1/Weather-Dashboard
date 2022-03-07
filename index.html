@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+    <link rel="stylesheet" href="./assets/style.css" />
+
+</head>
+
+<body>
+    <header id="title">
+        <h2>Weather Dashboard</h2>
+    </header>
+    <section class="container">
+        <div class="cities">
+
+            <form class="search-city">
+                <h3>Search for a City:</h3>
+                <input id="city" type="text" placeholder="Enter a City Name" />
+                <br />
+                <button class="searchbtn" id="search">Search</button>
+            </form>
+
+            <article>
+                <ul class="city-list">
+                    <li class="btn">Austin</li>
+                    <li class="btn">Chicago</li>
+                    <li class="btn">New York</li>
+                    <li class="btn">Orlando</li>
+                    <li class="btn">San Francisco</li>
+                    <li class="btn">Seattle</li>
+                    <li class="btn">Denver</li>
+                    <li class="btn">Atlanta</li>
+                </ul>
+
+            </article>
+
+        </div>
+    </section>
+    <section class="containt-left">
+        <div class="city-weather" id="today-weather">
+            <h3 class="current-city"><span id="city-weather-info"></span></h3>
+            <div class="details">
+                <div id="image"></div>
+
+
+            </div>
+        </div>
+
+
+        <div class="forecastContainer">
+            <h3>5-days Forecast:</h3>
+            <div class="days-container">
+
+            </div>
+        </div>
+
+        <script src="./assets/js/style.js"></script>
+    </section>
+
+</body>
+
+</html>
