@@ -33,7 +33,7 @@ function getCityWeather(city) {
         if (response.ok) {
             response.json().then(function (data) {
 
-                // console.log(data);
+                console.log(data);
                 weatherInfo(data, city);
                 // console.log(temp);
             })
@@ -153,7 +153,7 @@ var weatherForecast = function (long, lat) {
 }
 var displayForecast = function (forecastDetails) {
     // console.log(forecastDetails);
-    for (var i = 1; i < 6; i++) {
+    for (var i = 1; i < forecastDetails.list.length; i+=8) {
 
         var tempIn = forecastDetails.list[i].main.temp;
         var windIn = forecastDetails.list[i].wind.speed;
