@@ -9,30 +9,31 @@ var citySearchTerm = document.querySelector(".details");
 var forecastContainerEl = document.querySelector(".days-container");
 var weatherImage = document.querySelector("#image")
 var searchListCity = document.getElementsByTagName("li")
-console.log(searchListCity)
-
+// console.log(searchListCity)
 
 function cityInputValue(event) {
     event.preventDefault();
+
     var city = cityInput.value.trim();
     if (city) {
+
         getCityWeather(city);
         cityInput.value = "";
     } else {
         window.alert("Please enter a City Name");
     }
-    console.log(city)
+    // console.log(city)
 
 }
 
 function getCityWeather(city) {
     var wheatherUrl = api + city + apiKey + units;
-    console.log(wheatherUrl);
+    // console.log(wheatherUrl);
     fetch(wheatherUrl).then(function (response) {
         if (response.ok) {
             response.json().then(function (data) {
 
-                console.log(data);
+                // console.log(data);
                 weatherInfo(data, city);
                 // console.log(temp);
             })
@@ -43,14 +44,11 @@ function getCityWeather(city) {
 
     })
     //  console.log(response);
-    console.log(city);
+    // console.log(city);
 
 }
 
-
-
 var weatherInfo = function (retResult, cityInfo) {
-
 
     cityContainerEl.textContent = cityInfo;
     citySearchTerm.textContent = "";
@@ -59,26 +57,28 @@ var weatherInfo = function (retResult, cityInfo) {
     // console.log(temp);
     // console.log(wind);
     // console.log(humidity);
-    console.log(cityInfo);
-    console.log(retResult);
+    // console.log(cityInfo);
+    // console.log(retResult);
     var tempInfo = retResult.main.temp;
     var windInfo = retResult.wind.speed;
     var humidityInfo = retResult.main.humidity;
     var longitude = retResult.coord.lon;
     var latitude = retResult.coord.lat;
     var currentDate = retResult.dt;
-
     var d = new Date(currentDate * 1000);
+   var formattedDate = ('0' + (d.getMonth() + 1)).slice(-2) + '/'+('0' + d.getDate()).slice(-2)  +  '/' + d.getFullYear() 
+//    console.log(formattedDate)
+ 
     var text = d.toDateString();
 
-    console.log(text)
-    console.log(tempInfo);
-    console.log(windInfo);
-    console.log(humidityInfo);
-    console.log(longitude);
-    console.log(latitude);
+    // console.log(text)
+    // console.log(tempInfo);
+    // console.log(windInfo);
+    // console.log(humidityInfo);
+    // console.log(longitude);
+    // console.log(latitude);
     var infoEl = document.createElement("div");
-    // infoEl.class = "details-whether-info";
+    infoEl.classList = "details-whether-info";
     var tempD = document.createElement("p");
     var windD = document.createElement("p");
     var humidityD = document.createElement("p");
@@ -89,11 +89,11 @@ var weatherInfo = function (retResult, cityInfo) {
     tempD.textContent = "Temp: " + Math.floor(tempInfo) + "°C";
     windD.textContent = "Wind: " + windInfo + " MPH";
     humidityD.textContent = "Humidity: " + humidityInfo + " %";
-    todayDate.textContent = text
+    todayDate.textContent = formattedDate
     // console.log(currentDate*1000)
 
     var id = retResult.weather[0].id;
-    console.log(id)
+    // console.log(id)
     if (id == 800) {
         imageTempD.src = "./assets/image/clear.svg";
 
@@ -118,15 +118,12 @@ var weatherInfo = function (retResult, cityInfo) {
         imageTempD.src = "./assets/image/rain.svg";
     }
 
-
-
     citySearchTerm.appendChild(infoEl);
     infoEl.appendChild(todayDate);
     infoEl.appendChild(imageTempD);
     infoEl.appendChild(tempD);
     infoEl.appendChild(windD);
     infoEl.appendChild(humidityD);
-
 
     weatherForecast(longitude, latitude)
 
@@ -136,13 +133,13 @@ var weatherForecast = function (long, lat) {
     var apiKey = '&appid=f5ff263eeaa16377d5dcae5e7d801763';
     var units = '&units=metric';
     var forecastUrl = api + lat + '&lon=' + long + apiKey + units;
-    console.log(forecastUrl);
+    // console.log(forecastUrl);
 
     fetch(forecastUrl).then(function (response) {
         if (response.ok) {
             response.json().then(function (data) {
 
-                console.log(data);
+                // console.log(data);
                 forecastContainerEl.textContent = "";
                 displayForecast(data);
                 // console.log(temp);
@@ -155,18 +152,27 @@ var weatherForecast = function (long, lat) {
     })
 }
 var displayForecast = function (forecastDetails) {
-    console.log(forecastDetails);
+    // console.log(forecastDetails);
     for (var i = 1; i < 6; i++) {
 
         var tempIn = forecastDetails.list[i].main.temp;
         var windIn = forecastDetails.list[i].wind.speed;
         var humidityIn = forecastDetails.list[i].main.humidity;
-        var forecastDate = new Date(forecastDetails.list[i].dt * 1000).toDateString();
+        var forecastDate = new Date(forecastDetails.list[i].dt * 1000);
+        // var forecastDate = new Date(forecastDetails.list[i].dt * 1000).toDateString();
+        forecastDate = ('0' + (forecastDate.getMonth() + 1)).slice(-2) + '/'+('0' + forecastDate.getDate()).slice(-2)  +  '/' + forecastDate.getFullYear() 
+        // forecastDetails.list.weather[0].id.forEach(id=>{
+        //     var weatherId = forecastDetails.list[i].weather[0].id;
+        //     console.log(weatherId)
+        // })
+        // console.log(forecastDate)
 
-        console.log(tempIn);
-        console.log(windIn);
-        console.log(humidityIn);
-        console.log(forecastDate);
+        var weatherId = forecastDetails.list[i].weather[0].id;
+   
+        // console.log(tempIn);
+        // console.log(windIn);
+        // console.log(humidityIn);
+        // console.log(forecastDate);
 
         var forecastInfoEl = document.createElement("div");
         forecastInfoEl.classList = "further-container";
@@ -180,30 +186,30 @@ var displayForecast = function (forecastDetails) {
         forecastWindD.textContent = "Wind: " + windIn + " MPH";
         forecastHumidityD.textContent = "Humidity: " + humidityIn + " %";
         futureDate.textContent = forecastDate
-        var weatherId = forecastDetails.list[i].weather[0].id;
-        console.log(weatherId)
+
+        // console.log(weatherId)
 
         if (weatherId == 800) {
             imageIcon.src = "./assets/image/clear.svg";
 
         }
-        else if (id >= 200 && id <= 232) {
+        else if (weatherId >= 200 && weatherId <= 232) {
             imageIcon.src = "./assets/image/storm.svg";
 
         }
-        else if (id >= 600 && id <= 622) {
+        else if (weatherId >= 600 && weatherId <= 622) {
             imageIcon.src = "./assets/image/snow.svg";
 
         }
-        else if (id >= 701 && id <= 781) {
+        else if (weatherId >= 701 && weatherId <= 781) {
             imageIcon.src = "./assets/image/haze.svg";
 
         }
-        else if (id >= 801 && id <= 804) {
+        else if (weatherId >= 801 && weatherId <= 804) {
             imageIcon.src = "./assets/image/Cloud.svg";
 
         }
-        else if ((id >= 300 && id <= 321) || (id >= 500 && id <= 531)) {
+        else if ((weatherId >= 300 && weatherId <= 321) || (weatherId >= 500 && weatherId <= 531)) {
             imageIcon.src = "./assets/image/rain.svg";
         }
 
