@@ -32,8 +32,7 @@ function getCityWeather(city) {
     fetch(wheatherUrl).then(function (response) {
         if (response.ok) {
             response.json().then(function (data) {
-
-                console.log(data);
+                // console.log(data);
                 weatherInfo(data, city);
                 // console.log(temp);
             })
@@ -41,15 +40,16 @@ function getCityWeather(city) {
         else {
             alert("City Not Found");
         }
-
     })
     //  console.log(response);
     // console.log(city);
-
 }
 
 var weatherInfo = function (retResult, cityInfo) {
-
+    var currentlongitude = retResult.coord.lon;
+    var currentlatitude = retResult.coord.lat;
+    var indexUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + currentlatitude + '&lon' + currentlongitude + '&exclude=hourly, minutely' + apiKey + units;
+    // console.log(indexUrl)
     cityContainerEl.textContent = cityInfo;
     citySearchTerm.textContent = "";
 
@@ -66,9 +66,9 @@ var weatherInfo = function (retResult, cityInfo) {
     var latitude = retResult.coord.lat;
     var currentDate = retResult.dt;
     var d = new Date(currentDate * 1000);
-   var formattedDate = ('0' + (d.getMonth() + 1)).slice(-2) + '/'+('0' + d.getDate()).slice(-2)  +  '/' + d.getFullYear() 
-//    console.log(formattedDate)
- 
+    var formattedDate = ('0' + (d.getMonth() + 1)).slice(-2) + '/' + ('0' + d.getDate()).slice(-2) + '/' + d.getFullYear()
+    //    console.log(formattedDate)
+
     var text = d.toDateString();
 
     // console.log(text)
@@ -111,7 +111,7 @@ var weatherInfo = function (retResult, cityInfo) {
 
     }
     else if (id >= 801 && id <= 804) {
-        imageTempD.src = "./assets/image/Cloud.svg";
+        imageTempD.src = "./assets/image/cloud.svg";
 
     }
     else if ((id >= 300 && id <= 321) || (id >= 500 && id <= 531)) {
@@ -153,14 +153,14 @@ var weatherForecast = function (long, lat) {
 }
 var displayForecast = function (forecastDetails) {
     // console.log(forecastDetails);
-    for (var i = 1; i < forecastDetails.list.length; i+=8) {
+    for (var i = 1; i < forecastDetails.list.length; i += 8) {
 
         var tempIn = forecastDetails.list[i].main.temp;
         var windIn = forecastDetails.list[i].wind.speed;
         var humidityIn = forecastDetails.list[i].main.humidity;
         var forecastDate = new Date(forecastDetails.list[i].dt * 1000);
         // var forecastDate = new Date(forecastDetails.list[i].dt * 1000).toDateString();
-        forecastDate = ('0' + (forecastDate.getMonth() + 1)).slice(-2) + '/'+('0' + forecastDate.getDate()).slice(-2)  +  '/' + forecastDate.getFullYear() 
+        forecastDate = ('0' + (forecastDate.getMonth() + 1)).slice(-2) + '/' + ('0' + forecastDate.getDate()).slice(-2) + '/' + forecastDate.getFullYear()
         // forecastDetails.list.weather[0].id.forEach(id=>{
         //     var weatherId = forecastDetails.list[i].weather[0].id;
         //     console.log(weatherId)
@@ -168,7 +168,7 @@ var displayForecast = function (forecastDetails) {
         // console.log(forecastDate)
 
         var weatherId = forecastDetails.list[i].weather[0].id;
-   
+
         // console.log(tempIn);
         // console.log(windIn);
         // console.log(humidityIn);
@@ -206,7 +206,7 @@ var displayForecast = function (forecastDetails) {
 
         }
         else if (weatherId >= 801 && weatherId <= 804) {
-            imageIcon.src = "./assets/image/Cloud.svg";
+            imageIcon.src = "./assets/image/cloud.svg";
 
         }
         else if ((weatherId >= 300 && weatherId <= 321) || (weatherId >= 500 && weatherId <= 531)) {
