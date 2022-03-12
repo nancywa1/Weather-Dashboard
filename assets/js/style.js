@@ -33,7 +33,24 @@ function getCityWeather(city) {
         if (response.ok) {
             response.json().then(function (data) {
                 // console.log(data);
-                weatherInfo(data, city);
+                var mainlongitude = data.coord.lon;
+                var mainlatitude = data.coord.lat;
+                url='https://api.openweathermap.org/data/2.5/onecall?lat='+mainlatitude+'&lon='+mainlongitude+'&exclude=hourly, minutely'+'&appid=f5ff263eeaa16377d5dcae5e7d801763'+'&units=metric';
+                fetch(url).then(function (responseMain) {
+                    if (responseMain.ok) {
+                        responseMain.json().then(function (dataMain) {
+            
+                            console.log(dataMain);
+                            weatherInfo(dataMain, city);
+                    
+                            // console.log(temp);
+                        })
+                    }
+                    else {
+                        alert("No Forecast Info");
+                    }
+
+                })
                 // console.log(temp);
             })
         }
@@ -46,8 +63,8 @@ function getCityWeather(city) {
 }
 
 var weatherInfo = function (retResult, cityInfo) {
-    var currentlongitude = retResult.coord.lon;
-    var currentlatitude = retResult.coord.lat;
+    var currentlongitude = retResult.lon;
+    var currentlatitude = retResult.lat;
     var indexUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + currentlatitude + '&lon' + currentlongitude + '&exclude=hourly, minutely' + apiKey + units;
     // console.log(indexUrl)
     cityContainerEl.textContent = cityInfo;
@@ -59,17 +76,18 @@ var weatherInfo = function (retResult, cityInfo) {
     // console.log(humidity);
     // console.log(cityInfo);
     // console.log(retResult);
-    var tempInfo = retResult.main.temp;
-    var windInfo = retResult.wind.speed;
-    var humidityInfo = retResult.main.humidity;
-    var longitude = retResult.coord.lon;
-    var latitude = retResult.coord.lat;
-    var currentDate = retResult.dt;
+    var tempInfo = retResult.current.temp;
+    var windInfo = retResult.current.wind_speed;
+    var humidityInfo = retResult.current.humidity;
+    var longitude = retResult.lon;
+    var latitude = retResult.lat;
+    var currentDate = retResult.daily[0].dt;
     var d = new Date(currentDate * 1000);
-    var formattedDate = ('0' + (d.getMonth() + 1)).slice(-2) + '/' + ('0' + d.getDate()).slice(-2) + '/' + d.getFullYear()
+    var formattedDate = ('0' + (d.getMonth() + 1)).slice(-2) + '/' + ('0' + d.getDate()).slice(-2) + '/' + d.getFullYear();
+    var uvIndexInfo=retResult.current.uvi;
     //    console.log(formattedDate)
 
-    var text = d.toDateString();
+    // var text = d.toDateString();
 
     // console.log(text)
     // console.log(tempInfo);
@@ -82,6 +100,8 @@ var weatherInfo = function (retResult, cityInfo) {
     var tempD = document.createElement("p");
     var windD = document.createElement("p");
     var humidityD = document.createElement("p");
+    var uvIndex = document.createElement("p");
+    uvIndex.classList = "indexcolor";
     var todayDate = document.createElement("p");
     var imageTempD = document.createElement("img");
     imageTempD.classList = "weatherIcon";
@@ -89,10 +109,25 @@ var weatherInfo = function (retResult, cityInfo) {
     tempD.textContent = "Temp: " + Math.floor(tempInfo) + "°C";
     windD.textContent = "Wind: " + windInfo + " MPH";
     humidityD.textContent = "Humidity: " + humidityInfo + " %";
+    uvIndex.textContent="UV Index: "+ uvIndexInfo;
     todayDate.textContent = formattedDate
     // console.log(currentDate*1000)
 
-    var id = retResult.weather[0].id;
+    if (uvIndexInfo<3){
+        uvIndex.style.backgroundColor="green";
+        uvIndex.style.width = "80px";
+    }else if (5<uvIndexInfo<3)
+    {
+        uvIndex.style.backgroundColor="yellow";
+        uvIndex.style.width = "80px";
+    }
+    else if (uvIndexInfo>6)
+    {
+        uvIndex.style.backgroundColor="red";
+        uvIndex.style.width = "80px";
+    }
+
+    var id = retResult.current.weather[0].id;
     // console.log(id)
     if (id == 800) {
         imageTempD.src = "./assets/image/clear.svg";
@@ -124,7 +159,7 @@ var weatherInfo = function (retResult, cityInfo) {
     infoEl.appendChild(tempD);
     infoEl.appendChild(windD);
     infoEl.appendChild(humidityD);
-
+    infoEl.appendChild(uvIndex);
     weatherForecast(longitude, latitude)
 
 }
