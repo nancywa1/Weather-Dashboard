@@ -31,20 +31,13 @@ header {
 
 .cities {
     margin: 20px;
-    /* display: flex; */
-    /* justify-content: center;
-    flex-wrap: wrap; */
     align-items: flex-start;
 
 }
 
 .searchbtn {
     width: 100%;
-
-    /* height: calc(100% - 50px); */
     background-color: skyblue;
-    /* background:-webkit-linear-gradient(to right, white,lightblue);
-    background:linear-gradient(to right,white,lightblue); */
     border-radius: 5px;
     padding: 5px 0;
 }
@@ -52,11 +45,6 @@ header {
 .city-list {
     border-top: 1px solid gray;
     margin: 20px 0;
-    /* background-color: gray; */
-    /* height: calc(100% - 80px); */
-    /* background: rgb(196, 196, 196); */
-    /* border-radius: 12px; */
-    /* border: 2px solid  gray; */
 }
 
 body ul li {
@@ -66,13 +54,16 @@ body ul li {
 
 }
 
-/* .btn { */
+#city-weather-info {
+    position: absolute;
+    margin: 5px 0 20px 20px;
 
-/* display: inline-block; */
-/* position: absolute; */
+}
+.details-whether-info {
+    line-height: 1.5;
+    padding-top: 10px;
+}
 
-
-/* } */
 .btn {
     border: 1px solid gray;
     margin-top: 15px;
@@ -99,7 +90,7 @@ body ul li {
 
 .city-weather {
     margin-top: 30px;
-    height: 180px;
+    height: 200px;
     width: 1090px;
     border: 1px solid black;
     border-radius: 5px;
@@ -136,6 +127,7 @@ body ul li {
     margin: 20px 30px 0 0;
     text-align: center;
     padding-top: 20px;
+    line-height: 1.5;
 
 }
 
@@ -143,8 +135,14 @@ body ul li {
     #today-weather {
 
         height: 180px;
-        width: 600px;
+        width: 500px;
 
+    }
+
+    .city-weather {
+
+        height: 180px;
+        width: 600px;
     }
 }
 
@@ -152,18 +150,27 @@ body ul li {
     #today-weather {
 
         height: 180px;
+        width: 300px;
+
+    }
+
+    .city-weather {
+        height: 180px;
         width: 400px;
-
-
     }
 }
 
 @media screen and (max-width: 575px) {
 
     .further-container {
-        height: 100px;
+        height: 180px;
         width: 100px;
 
     }
 
+    .city-weather {
+
+        height: 180px;
+        width: 300px;
+    }
 }

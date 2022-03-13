@@ -39,17 +39,12 @@ function getCityWeather(city) {
                 fetch(url).then(function (responseMain) {
                     if (responseMain.ok) {
                         responseMain.json().then(function (dataMain) {
-            
-                            console.log(dataMain);
                             weatherInfo(dataMain, city);
-                    
-                            // console.log(temp);
                         })
                     }
                     else {
                         alert("No Forecast Info");
                     }
-
                 })
                 // console.log(temp);
             })
@@ -69,32 +64,14 @@ var weatherInfo = function (retResult, cityInfo) {
     // console.log(indexUrl)
     cityContainerEl.textContent = cityInfo;
     citySearchTerm.textContent = "";
-
-
-    // console.log(temp);
-    // console.log(wind);
-    // console.log(humidity);
-    // console.log(cityInfo);
-    // console.log(retResult);
     var tempInfo = retResult.current.temp;
     var windInfo = retResult.current.wind_speed;
     var humidityInfo = retResult.current.humidity;
-    var longitude = retResult.lon;
-    var latitude = retResult.lat;
     var currentDate = retResult.daily[0].dt;
     var d = new Date(currentDate * 1000);
     var formattedDate = ('0' + (d.getMonth() + 1)).slice(-2) + '/' + ('0' + d.getDate()).slice(-2) + '/' + d.getFullYear();
     var uvIndexInfo=retResult.current.uvi;
-    //    console.log(formattedDate)
 
-    // var text = d.toDateString();
-
-    // console.log(text)
-    // console.log(tempInfo);
-    // console.log(windInfo);
-    // console.log(humidityInfo);
-    // console.log(longitude);
-    // console.log(latitude);
     var infoEl = document.createElement("div");
     infoEl.classList = "details-whether-info";
     var tempD = document.createElement("p");
@@ -115,16 +92,16 @@ var weatherInfo = function (retResult, cityInfo) {
 
     if (uvIndexInfo<3){
         uvIndex.style.backgroundColor="green";
-        uvIndex.style.width = "80px";
+        uvIndex.style.width = "100px";
     }else if (5<uvIndexInfo<3)
     {
-        uvIndex.style.backgroundColor="yellow";
-        uvIndex.style.width = "80px";
+        uvIndex.style.backgroundColor="orange";
+        uvIndex.style.width = "100px";
     }
     else if (uvIndexInfo>6)
     {
         uvIndex.style.backgroundColor="red";
-        uvIndex.style.width = "80px";
+        uvIndex.style.width = "100px";
     }
 
     var id = retResult.current.weather[0].id;
@@ -160,55 +137,22 @@ var weatherInfo = function (retResult, cityInfo) {
     infoEl.appendChild(windD);
     infoEl.appendChild(humidityD);
     infoEl.appendChild(uvIndex);
-    weatherForecast(longitude, latitude)
-
+    // weatherForecast(longitude, latitude)
+    displayForecast(retResult);
 }
-var weatherForecast = function (long, lat) {
-    var api = 'https://api.openweathermap.org/data/2.5/forecast?lat=';
-    var apiKey = '&appid=f5ff263eeaa16377d5dcae5e7d801763';
-    var units = '&units=metric';
-    var forecastUrl = api + lat + '&lon=' + long + apiKey + units;
-    // console.log(forecastUrl);
 
-    fetch(forecastUrl).then(function (response) {
-        if (response.ok) {
-            response.json().then(function (data) {
-
-                // console.log(data);
-                forecastContainerEl.textContent = "";
-                displayForecast(data);
-                // console.log(temp);
-            })
-        }
-        else {
-            alert("No Forecast Info");
-        }
-
-    })
-}
 var displayForecast = function (forecastDetails) {
     // console.log(forecastDetails);
-    for (var i = 1; i < forecastDetails.list.length; i += 8) {
-
-        var tempIn = forecastDetails.list[i].main.temp;
-        var windIn = forecastDetails.list[i].wind.speed;
-        var humidityIn = forecastDetails.list[i].main.humidity;
-        var forecastDate = new Date(forecastDetails.list[i].dt * 1000);
+    forecastContainerEl.textContent = "";
+    for (var i = 1; i < 6; i ++) {
+        
+        var tempIn = forecastDetails.daily[i].temp.day;
+        var windIn = forecastDetails.daily[i].wind_speed;
+        var humidityIn = forecastDetails.daily[i].humidity;
+        var forecastDate = new Date(forecastDetails.daily[i].dt * 1000);
         // var forecastDate = new Date(forecastDetails.list[i].dt * 1000).toDateString();
-        forecastDate = ('0' + (forecastDate.getMonth() + 1)).slice(-2) + '/' + ('0' + forecastDate.getDate()).slice(-2) + '/' + forecastDate.getFullYear()
-        // forecastDetails.list.weather[0].id.forEach(id=>{
-        //     var weatherId = forecastDetails.list[i].weather[0].id;
-        //     console.log(weatherId)
-        // })
-        // console.log(forecastDate)
-
-        var weatherId = forecastDetails.list[i].weather[0].id;
-
-        // console.log(tempIn);
-        // console.log(windIn);
-        // console.log(humidityIn);
-        // console.log(forecastDate);
-
+        forecastDate = ('0' + (forecastDate.getMonth() + 1)).slice(-2) + '/' + ('0' + forecastDate.getDate()).slice(-2) + '/' + forecastDate.getFullYear();
+        var weatherId = forecastDetails.daily[i].weather[0].id;
         var forecastInfoEl = document.createElement("div");
         forecastInfoEl.classList = "further-container";
         var forecastTempD = document.createElement("p");
@@ -218,11 +162,9 @@ var displayForecast = function (forecastDetails) {
         var imageIcon = document.createElement("img");
         imageIcon.classList = "weatherIcon";
         forecastTempD.textContent = "Temp: " + Math.floor(tempIn) + "°C";
-        forecastWindD.textContent = "Wind: " + windIn + " MPH";
+        forecastWindD.textContent = "Wind: " + Math.floor(windIn)+ " MPH";
         forecastHumidityD.textContent = "Humidity: " + humidityIn + " %";
         futureDate.textContent = forecastDate
-
-        // console.log(weatherId)
 
         if (weatherId == 800) {
             imageIcon.src = "./assets/image/clear.svg";
